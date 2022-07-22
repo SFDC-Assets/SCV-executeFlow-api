@@ -3,6 +3,7 @@ const SCVLoggingUtil = require("./SCVLoggingUtil");
 const api = require("./sfRestApi");
 const queryEngine = require("./queryEngine");
 const utils = require("./utils");
+const SFSPhoneCallFlow = require("./SFSPhoneCallFlow");
 
 // --------------- Events -----------------------
 
@@ -66,13 +67,19 @@ exports.handler = async event => {
       result = dispatchSearch(sosl);
       break;
     }
-    case "realtimeAlertEvent":
+    case "realtimeAlertEvent": {
       result = await api.sendRealtimeAlertEvent(
         utils.getRealtimeAlertEventFieldValuesFromConnectLambdaParams(
           event.Details.Parameters
         )
       );
       break;
+    }
+    case "SFSPhoneCallFlowQuery": {
+      const res = await SFSPhoneCallFlow.entryPoint(event);
+      result = flatten(res);
+      break;
+    }
     default: {
       SCVLoggingUtil.warn(
         "invokeSfRestApi.handler.handler",
@@ -83,8 +90,10 @@ exports.handler = async event => {
       throw new Error(`Unsupported method: ${methodName}`);
     }
   }
-  
+
   if (result.success === false) {
     throw new Error(result.errorMessage);
-  } else return result;
+  } else {
+    return result;
+  }
 };

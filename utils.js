@@ -132,7 +132,7 @@ function getSObjectFieldValuesFromConnectLambdaParams(params) {
 
 function getRealtimeAlertEventFieldValuesFromConnectLambdaParams(params) {
   const fieldValues = {};
-  Object.entries(params).forEach((entry) => {
+  Object.entries(params).forEach(entry => {
     const key = entry[0];
     if (key !== "methodName") {
       fieldValues[key] = entry[1];

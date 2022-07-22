@@ -96,7 +96,7 @@ async function sendRealtimeAlertEvent(fieldValues) {
       "post",
       "/sobjects/RealtimeAlertEvent",
       fieldValues,
-      { "Content-Type": "application/json"}
+      { "Content-Type": "application/json" }
     );
 
     return {
